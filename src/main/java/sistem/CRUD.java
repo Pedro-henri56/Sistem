@@ -15,22 +15,18 @@ public class CRUD {
     
     //Cadastra usuario
     public static void cadastrarUsuarios(Usuarios usuarios) throws SQLException {
-       String sql = "INSERT INTO usuarios (nome, email, senha, adm) VALUES (?, ?, ?, ?)";
-       
-       
-        try (Connection conn = ConexaoDB.getConnection();
+        String sql = "INSERT INTO usuarios (nome, email, cpf, senha, adm) VALUES (?, ?, ?, ?, ?)";
+
+    try (Connection conn = ConexaoDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            
-            stmt.setString(1, usuarios.getNome());
-            stmt.setString(2, usuarios.getEmail());
-            stmt.setString(3, usuarios.getSenha());
-            stmt.setInt(4, usuarios.isAdm() ? 1 : 0);
-            
-            stmt.executeUpdate();  
-            
-        } catch (SQLException e) {
-        throw new RuntimeException("Erro ao salvar usuario: " + e.getMessage(), e);
+
+        stmt.setString(1, usuarios.getNome());
+        stmt.setString(2, usuarios.getEmail());
+        stmt.setString(3, usuarios.getCpf());
+        stmt.setString(4, usuarios.getSenha());
+        stmt.setBoolean(5, usuarios.isAdm());
+
+        stmt.executeUpdate();
     }
     }
     
@@ -66,6 +62,7 @@ public class CRUD {
             u.setId(rs.getInt("id"));
             u.setNome(rs.getString("nome"));
             u.setEmail(rs.getString("email"));
+            u.setCpf(rs.getString("cpf"));
             u.setAdm(rs.getBoolean("adm"));
             return u;
         }
@@ -83,33 +80,35 @@ public class CRUD {
     
 public static Usuarios validarLogin(String email, String senha) throws SQLException {
 
-    String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+     String sql = "SELECT id, nome, email, cpf, adm FROM usuarios WHERE email = ? AND senha = ?";
 
-Connection con = ConexaoDB.getConnection();
-PreparedStatement stmt = con.prepareStatement(sql);
+    try (Connection con = ConexaoDB.getConnection();
+         PreparedStatement stmt = con.prepareStatement(sql)) {
 
-stmt.setString(1, email);
-stmt.setString(2, senha);
+        stmt.setString(1, email);
+        stmt.setString(2, senha);
 
-ResultSet rs = stmt.executeQuery();
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Usuarios u = new Usuarios();
+                u.setId(rs.getInt("id"));
+                u.setNome(rs.getString("nome"));
+                u.setEmail(rs.getString("email"));
+                u.setCpf(rs.getString("cpf"));
+                u.setAdm(rs.getBoolean("adm"));
+                return u;
+            }
+        }
+    }
 
-if (rs.next()) {
-    Usuarios u = new Usuarios();
-    u.setId(rs.getInt("id"));
-    u.setNome(rs.getString("nome"));
-    u.setAdm(rs.getBoolean("adm"));
-    return u;
-}
-        return null;
-
+    return null;
 }
 
     //Listar usuarios na tabela
-    public static List<Usuarios> listarUsuarios() throws SQLException {
+   public static List<Usuarios> listarUsuarios() throws SQLException {
+   List<Usuarios> lista = new ArrayList<>();
 
-    List<Usuarios> lista = new ArrayList<>();
-
-    String sql = "SELECT id, nome, email, senha, adm  FROM usuarios";
+    String sql = "SELECT id, nome, email, cpf, senha, adm FROM usuarios";
 
     try (Connection conn = ConexaoDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql);
@@ -120,32 +119,38 @@ if (rs.next()) {
             u.setId(rs.getInt("id"));
             u.setNome(rs.getString("nome"));
             u.setEmail(rs.getString("email"));
+            u.setCpf(rs.getString("cpf"));
             u.setSenha(rs.getString("senha"));
             u.setAdm(rs.getBoolean("adm"));
-
             lista.add(u);
         }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao listar usuários: " + e.getMessage(), e);
     }
 
     return lista;
 }
 
+
     //editar usuario
     public static void editarUsuario(Usuarios usuario) throws SQLException {
 
-    String sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, adm = ? WHERE id = ?";
+    String sql = "UPDATE usuarios SET nome = ?, email = ?, cpf = ?, senha = ?, adm = ? WHERE id = ?";
 
     try (Connection conn = ConexaoDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         stmt.setString(1, usuario.getNome());
         stmt.setString(2, usuario.getEmail());
-        stmt.setString(3, usuario.getSenha());
-        stmt.setInt(4, usuario.isAdm() ? 1 : 0);
-        stmt.setInt(5, usuario.getId());
+        stmt.setString(3, usuario.getCpf());
+        stmt.setString(4, usuario.getSenha());
+        stmt.setInt(5, usuario.isAdm() ? 1 : 0);
+        stmt.setInt(6, usuario.getId());
 
         stmt.executeUpdate();
     }
+  
 }
 
     
@@ -156,7 +161,7 @@ if (rs.next()) {
     List<Object[]> lista = new ArrayList<>();
 
     String sql = """
-        SELECT u.nome, f.valor
+        SELECT u.nome, f.Gasto,f.valor
         FROM usuarios u
         JOIN financas f ON u.id = f.usuario_id
     """;
@@ -169,6 +174,7 @@ if (rs.next()) {
 
             Object[] linha = {
                 rs.getString("nome"),
+                rs.getString("Gasto"),
                 rs.getBigDecimal("valor")
             };
 
@@ -184,7 +190,7 @@ if (rs.next()) {
     List<Object[]> lista = new java.util.ArrayList<>();
 
     String sql = """
-        SELECT u.nome, f.valor
+        SELECT u.nome, f.Gasto,f.valor
         FROM usuarios u
         JOIN financas f ON u.id = f.usuario_id
         WHERE u.id = ?
@@ -199,6 +205,7 @@ if (rs.next()) {
             while (rs.next()) {
                 lista.add(new Object[]{
                     rs.getString("nome"),
+                    rs.getString("Gasto"),
                     rs.getBigDecimal("valor")
                 });
             }
@@ -208,5 +215,19 @@ if (rs.next()) {
     return lista;
 }
 
+public static boolean usuarioExiste(String nome, String email) throws SQLException {
+    String sql = "SELECT id FROM usuarios WHERE nome = ? OR email = ?";
 
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, nome);
+        stmt.setString(2, email);
+
+        ResultSet rs = stmt.executeQuery();
+        return rs.next(); // se encontrou, já existe
+    }
+}
+
+    
 }

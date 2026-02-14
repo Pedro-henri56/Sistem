@@ -30,7 +30,7 @@ public class Telalogado extends javax.swing.JFrame {
         List<Object[]> lista = CRUD.listarFinancasPorUsuario(usuarioLogado.getId());
 
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Nome");
+        modelo.addColumn("Gasto");
         modelo.addColumn("Valor");
 
         for (Object[] linha : lista) {

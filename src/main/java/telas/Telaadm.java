@@ -26,6 +26,7 @@ public class Telaadm extends javax.swing.JFrame {
     
     private void limparCampos() {
     Campo_nome.setText("");
+    Campo_cpf.setText("");
     Campo_email.setText("");
     Campo_senha.setText("");
     checkAdm.setSelected(false);
@@ -42,6 +43,7 @@ public class Telaadm extends javax.swing.JFrame {
         modelo.addColumn("ID");
         modelo.addColumn("Nome");
         modelo.addColumn("Email");
+        modelo.addColumn("Cpf");
         modelo.addColumn("Senha");
         modelo.addColumn("Admin");
 
@@ -50,6 +52,7 @@ public class Telaadm extends javax.swing.JFrame {
                 u.getId(),
                 u.getNome(),
                 u.getEmail(),
+                u.getCpf(),
                 u.getSenha(),
                 u.isAdm()
             });
@@ -77,6 +80,8 @@ public class Telaadm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jTextField1 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -93,6 +98,10 @@ public class Telaadm extends javax.swing.JFrame {
         Campo_senha = new javax.swing.JPasswordField();
         checkAdm = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        Campo_cpf = new javax.swing.JTextField();
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -198,22 +207,36 @@ public class Telaadm extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("ADMINISTRADOR");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("CPF :");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(208, 208, 208))))
+                .addContainerGap(253, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(208, 208, 208))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Campo_nome, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(Campo_email, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Campo_senha, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Campo_cpf, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(74, 74, 74)
                         .addComponent(btn_atualizar)
@@ -222,23 +245,14 @@ public class Telaadm extends javax.swing.JFrame {
                         .addGap(47, 47, 47)
                         .addComponent(btn_delete)
                         .addGap(51, 51, 51)
-                        .addComponent(btn_editar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(Campo_nome, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(Campo_email, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Campo_senha, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(134, 134, 134)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkAdm)))
-                .addContainerGap(200, Short.MAX_VALUE))
+                        .addComponent(btn_editar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkAdm)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,27 +260,31 @@ public class Telaadm extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(Campo_nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(checkAdm)
-                                    .addComponent(jLabel6)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(Campo_nome, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Campo_cpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(checkAdm)
+                            .addComponent(jLabel6))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
                     .addComponent(Campo_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(Campo_senha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_atualizar)
                     .addComponent(btn_editar)
@@ -308,6 +326,7 @@ public class Telaadm extends javax.swing.JFrame {
           modelo.addColumn("ID");
           modelo.addColumn("Nome");
           modelo.addColumn("Email");
+          modelo.addColumn("cpf");
           modelo.addColumn("Senha");
           modelo.addColumn("Admin");
           for (Usuarios u : lista) {
@@ -315,6 +334,7 @@ public class Telaadm extends javax.swing.JFrame {
                u.getId(),
                u.getNome(),
                u.getEmail(),
+               u.getCpf(),
                u.getSenha(),
                u.isAdm()
         });
@@ -374,77 +394,124 @@ if (linhaSelecionada != -1) {
     }//GEN-LAST:event_checkAdmActionPerformed
 
     private void btn_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_adicionarActionPerformed
-        String nome = Campo_nome.getText();
-        String email = Campo_email.getText();
-        String senha = new String(Campo_senha.getPassword());
-        boolean adm; // se você estiver usando JCheckBox
-        adm = checkAdm.isSelected();
+        String nome = Campo_nome.getText().trim();
+    String email = Campo_email.getText().trim();
+    String cpf = Campo_cpf.getText().replaceAll("\\D", "");
+    String senha = new String(Campo_senha.getPassword());
+    boolean adm = checkAdm.isSelected();
 
-            Usuarios u = new Usuarios(nome, email, senha, adm);
+    if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+        return;
+    }
 
-try {
-    CRUD.cadastrarUsuarios(u);
+    if (cpf.length() != 11) {
+        JOptionPane.showMessageDialog(this, "CPF inválido. Deve conter 11 números.");
+        return;
+    }
 
-    JOptionPane.showMessageDialog(this,
-            "Usuário cadastrado com sucesso!");
+    Usuarios u = new Usuarios();
+    u.setNome(nome);
+    u.setEmail(email);
+    u.setCpf(cpf);
+    u.setSenha(senha);
+    u.setAdm(adm);
 
-    atualizarTabela();
-    limparCampos();
+    try {
+        CRUD.cadastrarUsuarios(u);
 
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this,
-            "Erro ao cadastrar usuário!");
+        JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
+        atualizarTabela();
+        limparCampos();
+
+    } catch (SQLException e) {
+
+    // Pega a mensagem do erro "mais de dentro" (root cause)
+    Throwable t = e;
+    while (t.getCause() != null) t = t.getCause();
+    String msg = String.valueOf(t.getMessage()).toLowerCase();
+
+    // 1062 = Duplicate entry (MySQL)
+    if (e.getErrorCode() == 1062) {
+        if (msg.contains("uk_usuarios_email") || msg.contains("email")) {
+            JOptionPane.showMessageDialog(this, "Esse email já está cadastrado.");
+            return;
+        }
+        if (msg.contains("uk_usuarios_cpf") || msg.contains("cpf")) {
+            JOptionPane.showMessageDialog(this, "Esse CPF já está cadastrado.");
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "Email/CPF já cadastrado.");
+        return;
+    }
+
+    JOptionPane.showMessageDialog(this, "Erro ao cadastrar usuário:\n" + e.getMessage());
 }
 
     }//GEN-LAST:event_btn_adicionarActionPerformed
 
     private void tabelaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaUsuariosMouseClicked
         int linha = tabelaUsuarios.getSelectedRow();
+    if (linha == -1) return;
 
-    if (linha != -1) {
+    Campo_nome.setText(String.valueOf(tabelaUsuarios.getValueAt(linha, 1)));
+    Campo_email.setText(String.valueOf(tabelaUsuarios.getValueAt(linha, 2)));
+    Campo_cpf.setText(String.valueOf(tabelaUsuarios.getValueAt(linha, 3)));
+    Campo_senha.setText(String.valueOf(tabelaUsuarios.getValueAt(linha, 4)));
 
-        Campo_nome.setText(tabelaUsuarios.getValueAt(linha, 1).toString());
-        Campo_email.setText(tabelaUsuarios.getValueAt(linha, 2).toString());
-        Campo_senha.setText(tabelaUsuarios.getValueAt(linha, 3).toString());
+    Object v = tabelaUsuarios.getValueAt(linha, 5); // coluna ADM
+    boolean adm;
 
-        boolean adm = (boolean) tabelaUsuarios.getValueAt(linha, 4);
-        checkAdm.setSelected(adm);
+    if (v instanceof Boolean) {
+        adm = (Boolean) v;
+    } else if (v instanceof Number) {
+        adm = ((Number) v).intValue() == 1;
+    } else {
+        String s = String.valueOf(v).trim();
+        adm = s.equals("1") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("sim");
     }
+
+    checkAdm.setSelected(adm);
     }//GEN-LAST:event_tabelaUsuariosMouseClicked
 
     private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
-        int linhaSelecionada = tabelaUsuarios.getSelectedRow();
+         int linhaSelecionada = tabelaUsuarios.getSelectedRow();
 
-if (linhaSelecionada != -1) {
+    if (linhaSelecionada == -1) {
+        JOptionPane.showMessageDialog(this, "Selecione um usuário para editar.");
+        return;
+    }
 
     int id = (int) tabelaUsuarios.getValueAt(linhaSelecionada, 0);
 
-    String nome = Campo_nome.getText();
-    String email = Campo_email.getText();
+    String nome = Campo_nome.getText().trim();
+    String email = Campo_email.getText().trim();
+    String cpf = Campo_cpf.getText().replaceAll("\\D", "");
     String senha = new String(Campo_senha.getPassword());
     boolean adm = checkAdm.isSelected();
 
-    Usuarios usuario = new Usuarios(id, nome, email, senha, adm);
+    if (cpf.length() != 11) {
+        JOptionPane.showMessageDialog(this, "CPF inválido.");
+        return;
+    }
+
+    Usuarios usuario = new Usuarios();
+    usuario.setId(id);
+    usuario.setNome(nome);
+    usuario.setEmail(email);
+    usuario.setCpf(cpf);
+    usuario.setSenha(senha);
+    usuario.setAdm(adm);
 
     try {
         CRUD.editarUsuario(usuario);
-
-        JOptionPane.showMessageDialog(this,
-                "Usuário atualizado com sucesso!");
-
+        JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!");
         atualizarTabela();
         limparCampos();
 
     } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this,
-                "Erro ao atualizar usuário!");
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar usuário:\n" + e.getMessage());
     }
-
-} else {
-    JOptionPane.showMessageDialog(this,
-            "Selecione um usuário para editar.");
-}
-
     }//GEN-LAST:event_btn_editarActionPerformed
 
     /**
@@ -474,6 +541,7 @@ if (linhaSelecionada != -1) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Campo_cpf;
     private javax.swing.JTextField Campo_email;
     private javax.swing.JTextField Campo_nome;
     private javax.swing.JPasswordField Campo_senha;
@@ -481,14 +549,17 @@ if (linhaSelecionada != -1) {
     private javax.swing.JButton btn_atualizar;
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_editar;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkAdm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tabelaUsuarios;
     // End of variables declaration//GEN-END:variables
 }

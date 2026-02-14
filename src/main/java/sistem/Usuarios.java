@@ -2,22 +2,34 @@ package sistem;
 
 public class Usuarios {
 
+    /**
+     * @return the cpf
+     */
+    
+
+    /**
+     * @param cpf the cpf to set
+     */
+   
+
     private int id;
     private String nome;
     private String email;
+    private String cpf;
     private String senha;
     private boolean adm;
-
-    public Usuarios() {
-    }
 
     public Usuarios(int id) {
         this.id = id;
     }
+    public Usuarios() {
+}
 
-    public Usuarios(String nome, String email, String senha) {
+
+    public Usuarios(String nome, String email, String cpf, String senha) {
         this.nome = nome;
         this.email = email;
+        this.cpf = cpf;
         this.senha = senha;
     }
 
@@ -59,7 +71,15 @@ public class Usuarios {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    public String getCpf() {
+        return cpf;
+    }
+    
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    
     public String getSenha() {
         return senha;
     }
