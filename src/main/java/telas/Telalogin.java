@@ -150,12 +150,8 @@ public class Telalogin extends javax.swing.JFrame {
             Telaadm tela = new Telaadm(usuario);
             tela.setVisible(true);
         } else {
-            try {
-                Telalogado tela = new Telalogado(usuario);
-                tela.setVisible(true);
-            } catch (SQLException ex) {
-                System.getLogger(Telalogin.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
+            Telalogado tela = new Telalogado(usuario);
+            tela.setVisible(true);
         }
 
         this.dispose();

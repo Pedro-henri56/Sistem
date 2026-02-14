@@ -160,11 +160,9 @@ public static Usuarios validarLogin(String email, String senha) throws SQLExcept
 
     List<Object[]> lista = new ArrayList<>();
 
-    String sql = """
-        SELECT u.nome, f.Gasto,f.valor
-        FROM usuarios u
-        JOIN financas f ON u.id = f.usuario_id
-    """;
+    String sql = "SELECT f.nome_gasto, f.valor, f.data_gasto " +
+             "FROM financas f WHERE f.usuario_id = ?";
+
 
     try (Connection conn = ConexaoDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql);
@@ -173,9 +171,9 @@ public static Usuarios validarLogin(String email, String senha) throws SQLExcept
         while (rs.next()) {
 
             Object[] linha = {
-                rs.getString("nome"),
-                rs.getString("Gasto"),
-                rs.getBigDecimal("valor")
+                rs.getString("nome_gasto"),
+                rs.getBigDecimal("nome_valor"),
+                rs.getDate("data_gasto")
             };
 
             lista.add(linha);
@@ -187,27 +185,27 @@ public static Usuarios validarLogin(String email, String senha) throws SQLExcept
 
     public static List<Object[]> listarFinancasPorUsuario(int usuarioId) throws SQLException {
 
-    List<Object[]> lista = new java.util.ArrayList<>();
+    List<Object[]> lista = new ArrayList<>();
 
-    String sql = """
-        SELECT u.nome, f.Gasto,f.valor
-        FROM usuarios u
-        JOIN financas f ON u.id = f.usuario_id
-        WHERE u.id = ?
-    """;
+    String sql = "SELECT f.nome_gasto, f.valor, f.data_gasto " +
+                 "FROM financas f WHERE f.usuario_id = ?";
 
-    try (java.sql.Connection conn = ConexaoDB.getConnection();
-         java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, usuarioId);
+        stmt.setInt(1, usuarioId); // ✅ ESSENCIAL
 
-        try (java.sql.ResultSet rs = stmt.executeQuery()) {
+        try (ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
-                lista.add(new Object[]{
-                    rs.getString("nome"),
-                    rs.getString("Gasto"),
-                    rs.getBigDecimal("valor")
-                });
+
+                Object[] linha = {
+                    rs.getString("nome_gasto"),
+                    rs.getBigDecimal("valor"),  // ✅ corrigido
+                    rs.getDate("data_gasto")
+                };
+
+                lista.add(linha);
             }
         }
     }

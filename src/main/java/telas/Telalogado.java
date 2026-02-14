@@ -32,6 +32,7 @@ public class Telalogado extends javax.swing.JFrame {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Gasto");
         modelo.addColumn("Valor");
+        modelo.addColumn("Data"); // você estava retornando data mas não mostrava
 
         for (Object[] linha : lista) {
             modelo.addRow(linha);
@@ -41,17 +42,18 @@ public class Telalogado extends javax.swing.JFrame {
 
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(this,
-                "Erro ao carregar finanças!");
+                "Erro ao carregar finanças!\n" + e.getMessage());
     }
 }
 
-    private Usuarios usuarioLogado;
+   private Usuarios usuarioLogado;
 
-    public Telalogado(Usuarios usuario) throws SQLException {
+    public Telalogado(Usuarios usuario) {
     initComponents();
     this.usuarioLogado = usuario;
-    listarFinancas();
+    mostrarFinancas(); // ✅ agora correto
 }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
