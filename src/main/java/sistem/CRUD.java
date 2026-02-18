@@ -1,10 +1,12 @@
-
+            
 package sistem;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -44,6 +46,57 @@ public class CRUD {
 
     }
 }
+    
+    public static boolean apagarGasto(int idFinancas, int usuarioId) throws SQLException {
+    String sql = "DELETE FROM financas WHERE id = ? AND usuario_id = ?";
+
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, idFinancas);
+        stmt.setInt(2, usuarioId);
+
+        return stmt.executeUpdate() > 0;
+    }
+}
+    
+    public static int editarGasto(int idFinanca, int usuarioId, String nomeGasto, BigDecimal valor, LocalDate data) throws SQLException {
+
+    String sql = "UPDATE financas SET nome_gasto = ?, valor = ?, data_gasto = ? " +
+                 "WHERE id = ? AND usuario_id = ?";
+
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, nomeGasto);
+        stmt.setBigDecimal(2, valor);
+        stmt.setDate(3, java.sql.Date.valueOf(data));
+        stmt.setInt(4, idFinanca);
+        stmt.setInt(5, usuarioId);
+
+        return stmt.executeUpdate();
+    }
+}
+
+
+    
+   public static void inserirGasto(int usuarioId, String nomeGasto, BigDecimal valor, LocalDate data) throws SQLException {
+
+    String sql = "INSERT INTO financas (nome_gasto, valor, data_gasto, usuario_id) VALUES (?, ?, ?, ?)";
+
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, nomeGasto);
+        stmt.setBigDecimal(2, valor);
+        stmt.setDate(3, java.sql.Date.valueOf(data));
+        stmt.setInt(4, usuarioId);
+
+        stmt.executeUpdate();
+    }
+}
+
+    
     //Buscar id no banco de dados
     
     public static Usuarios buscarPorId(int id) throws SQLException {
@@ -187,26 +240,24 @@ public static Usuarios validarLogin(String email, String senha) throws SQLExcept
 
     List<Object[]> lista = new ArrayList<>();
 
-    String sql = "SELECT f.nome_gasto, f.valor, f.data_gasto " +
-                 "FROM financas f WHERE f.usuario_id = ?";
+    String sql = "SELECT id, nome_gasto, valor, data_gasto FROM financas WHERE usuario_id = ?";
 
     try (Connection conn = ConexaoDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, usuarioId); // ✅ ESSENCIAL
+        stmt.setInt(1, usuarioId);
+        ResultSet rs = stmt.executeQuery();
 
-        try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
 
-            while (rs.next()) {
+            Object[] linha = {
+                rs.getInt("id"),
+                rs.getString("nome_gasto"),
+                rs.getBigDecimal("valor"),
+                rs.getDate("data_gasto")
+            };
 
-                Object[] linha = {
-                    rs.getString("nome_gasto"),
-                    rs.getBigDecimal("valor"),  // ✅ corrigido
-                    rs.getDate("data_gasto")
-                };
-
-                lista.add(linha);
-            }
+            lista.add(linha);
         }
     }
 

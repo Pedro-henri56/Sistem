@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package telas;
 
 import java.sql.SQLException;
@@ -395,9 +392,9 @@ if (linhaSelecionada != -1) {
 
     private void btn_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_adicionarActionPerformed
         String nome = Campo_nome.getText().trim();
-    String email = Campo_email.getText().trim();
-    String cpf = Campo_cpf.getText().replaceAll("\\D", "");
-    String senha = new String(Campo_senha.getPassword());
+        String email = Campo_email.getText().trim();
+        String cpf = Campo_cpf.getText().replaceAll("\\D", "");
+        String senha = new String(Campo_senha.getPassword());
     boolean adm = checkAdm.isSelected();
 
     if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {

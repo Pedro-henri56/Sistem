@@ -1,6 +1,50 @@
 package sistem;
 
+import java.time.LocalDate;
+
 public class Usuarios {
+
+    /**
+     * @return the gasto
+     */
+    public String getGasto() {
+        return gasto;
+    }
+
+    /**
+     * @param gasto the gasto to set
+     */
+    public void setGasto(String gasto) {
+        this.gasto = gasto;
+    }
+
+    /**
+     * @return the valor
+     */
+    public int getValor() {
+        return valor;
+    }
+
+    /**
+     * @param valor the valor to set
+     */
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
+    /**
+     * @return the data
+     */
+    public LocalDate getData() {
+        return data;
+    }
+
+    /**
+     * @param data the data to set
+     */
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
 
     /**
      * @return the cpf
@@ -18,6 +62,10 @@ public class Usuarios {
     private String cpf;
     private String senha;
     private boolean adm;
+    private String gasto;
+    private int valor;
+    private LocalDate data;
+    
 
     public Usuarios(int id) {
         this.id = id;

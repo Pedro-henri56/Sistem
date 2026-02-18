@@ -1,12 +1,15 @@
 
 package telas;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sistem.CRUD;
-import static sistem.CRUD.listarFinancas;
 import sistem.Usuarios;
 
 /**
@@ -17,10 +20,76 @@ public class Telalogado extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Telalogado.class.getName());
 
+    private LocalDate converterParaLocalDate(Object valorData) {
+
+    if (valorData == null) {
+        throw new IllegalArgumentException("Data vazia na tabela.");
+    }
+
+    if (valorData instanceof LocalDate) {
+        return (LocalDate) valorData;
+    }
+
+    if (valorData instanceof java.sql.Date) {
+        return ((java.sql.Date) valorData).toLocalDate();
+    }
+
+    if (valorData instanceof java.util.Date) {
+        java.util.Date d = (java.util.Date) valorData;
+        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    // Se for String: tenta os dois formatos comuns
+    String s = valorData.toString().trim();
+    try {
+        return LocalDate.parse(s); // yyyy-MM-dd
+    } catch (Exception ignored) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-M-d"); // aceita 2026-2-02
+        return LocalDate.parse(s, fmt);
+    }
+}
     
-    /**
-     * Creates new form Telalogado
-     */
+    private void limparcampos() {
+    campo_gasto.setText("");
+    campo_valor.setText("");
+    campo_dia.setSelectedIndex(0);
+    campo_mes.setSelectedIndex(0);
+    campo_ano.setSelectedIndex(0);
+}
+
+    
+    
+    
+private Usuarios usuarioLogado;
+
+    public Telalogado(Usuarios usuario) {
+    initComponents();
+    this.usuarioLogado = usuario;
+    lblusuario.setText("TENHA O CONTROLE DE SUAS FINANÇAS  " + usuario.getNome());
+    mostrarFinancas(); // ✅ agora correto
+}
+    
+    private int trataMesNumero(String mesNome) {
+        switch (mesNome) {
+            case "Janeiro": return 1;
+            case "Fevereiro": return 2;
+            case "Março": return 3;
+            case "Abril": return 4;
+            case "Maio": return 5;
+            case "Junho": return 6;
+            case "Julho": return 7;
+            case "Agosto": return 8;
+            case "Setembro": return 9;
+            case "Outubro": return 10;
+            case "Novembro": return 11;
+            case "Dezembro": return 12;
+            default:
+                throw new IllegalArgumentException("Mês inválido: " + mesNome);
+        }
+}
+
+
+
 
     
     private void mostrarFinancas() {
@@ -30,29 +99,28 @@ public class Telalogado extends javax.swing.JFrame {
         List<Object[]> lista = CRUD.listarFinancasPorUsuario(usuarioLogado.getId());
 
         DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
         modelo.addColumn("Gasto");
         modelo.addColumn("Valor");
-        modelo.addColumn("Data"); // você estava retornando data mas não mostrava
+        modelo.addColumn("Data");
 
         for (Object[] linha : lista) {
             modelo.addRow(linha);
         }
 
-        tabelaFinancas.setModel(modelo);
+        tabelafinancas.setModel(modelo);
 
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this,
-                "Erro ao carregar finanças!\n" + e.getMessage());
+        // 🔥 esconder coluna ID
+        tabelafinancas.getColumnModel().getColumn(0).setMinWidth(0);
+        tabelafinancas.getColumnModel().getColumn(0).setMaxWidth(0);
+        tabelafinancas.getColumnModel().getColumn(0).setWidth(0);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 }
 
-   private Usuarios usuarioLogado;
-
-    public Telalogado(Usuarios usuario) {
-    initComponents();
-    this.usuarioLogado = usuario;
-    mostrarFinancas(); // ✅ agora correto
-}
+   
 
 
     /**
@@ -66,15 +134,27 @@ public class Telalogado extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaFinancas = new javax.swing.JTable();
+        tabelafinancas = new javax.swing.JTable();
         btn_visualizar = new javax.swing.JButton();
+        btn_adicionar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        campo_gasto = new javax.swing.JTextField();
+        campo_valor = new javax.swing.JTextField();
+        campo_dia = new javax.swing.JComboBox<>();
+        campo_mes = new javax.swing.JComboBox<>();
+        campo_ano = new javax.swing.JComboBox<>();
+        btn_editar = new javax.swing.JButton();
+        btn_apagar = new javax.swing.JButton();
+        lblusuario = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 153, 0));
         jPanel1.setForeground(new java.awt.Color(204, 153, 0));
 
-        tabelaFinancas.setModel(new javax.swing.table.DefaultTableModel(
+        tabelafinancas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -85,12 +165,15 @@ public class Telalogado extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tabelaFinancas.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabelafinancas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaFinancasMouseClicked(evt);
+                tabelafinancasMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tabelafinancasMouseEntered(evt);
             }
         });
-        jScrollPane1.setViewportView(tabelaFinancas);
+        jScrollPane1.setViewportView(tabelafinancas);
 
         btn_visualizar.setText("Visualizar");
         btn_visualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -99,27 +182,118 @@ public class Telalogado extends javax.swing.JFrame {
             }
         });
 
+        btn_adicionar.setText("Adicionar");
+        btn_adicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_adicionarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Gasto");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Valor");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Data");
+
+        campo_dia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dia", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        campo_mes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mês", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
+
+        campo_ano.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ano", "2028", "2027", "2026", "2025", "2024", " ", " " }));
+
+        btn_editar.setText("Editar");
+        btn_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_editarActionPerformed(evt);
+            }
+        });
+
+        btn_apagar.setText("Apagar");
+        btn_apagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_apagarActionPerformed(evt);
+            }
+        });
+
+        lblusuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblusuario.setForeground(new java.awt.Color(0, 0, 0));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addComponent(btn_visualizar)
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_visualizar)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(campo_gasto, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(btn_adicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(100, 100, 100)
+                        .addComponent(btn_editar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(campo_valor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campo_dia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(campo_mes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campo_ano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(btn_apagar)))
+                .addGap(89, 89, 89))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 539, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
+                .addGap(22, 22, 22)
+                .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addComponent(btn_visualizar)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(campo_gasto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campo_valor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campo_dia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campo_mes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campo_ano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_visualizar)
+                    .addComponent(btn_adicionar)
+                    .addComponent(btn_editar)
+                    .addComponent(btn_apagar))
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -139,13 +313,138 @@ public class Telalogado extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tabelaFinancasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFinancasMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabelaFinancasMouseClicked
+    private void tabelafinancasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelafinancasMouseClicked
+        
+        int linha = tabelafinancas.getSelectedRow();
+    if (linha == -1) return;
+
+    // Agora que tem ID escondido:
+    // 0 = ID
+    // 1 = Gasto
+    // 2 = Valor
+    // 3 = Data
+
+    String gasto = String.valueOf(tabelafinancas.getValueAt(linha, 1));
+    String valor = String.valueOf(tabelafinancas.getValueAt(linha, 2));
+    Object valorData = tabelafinancas.getValueAt(linha, 3); // 🔥 DATA CORRETA
+
+    campo_gasto.setText(gasto);
+    campo_valor.setText(valor);
+
+    LocalDate dataSelecionada = (valorData instanceof java.sql.Date)
+            ? ((java.sql.Date) valorData).toLocalDate()
+            : LocalDate.parse(valorData.toString());
+
+    campo_dia.setSelectedItem(String.format("%02d", dataSelecionada.getDayOfMonth()));
+    campo_mes.setSelectedIndex(dataSelecionada.getMonthValue() - 1);
+    campo_ano.setSelectedItem(String.valueOf(dataSelecionada.getYear()));
+    }//GEN-LAST:event_tabelafinancasMouseClicked
 
     private void btn_visualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_visualizarActionPerformed
        mostrarFinancas();
+       limparcampos();
     }//GEN-LAST:event_btn_visualizarActionPerformed
+
+    private void btn_adicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_adicionarActionPerformed
+        try {
+        String nome = campo_gasto.getText().trim();
+        BigDecimal valor = new BigDecimal(campo_valor.getText().trim().replace(",", "."));
+
+        int ano = Integer.parseInt(campo_ano.getSelectedItem().toString());
+        int mes = campo_mes.getSelectedIndex() + 1; // Janeiro=0 -> 1
+        int dia = Integer.parseInt(campo_dia.getSelectedItem().toString());
+
+        LocalDate data = LocalDate.of(ano, mes, dia);
+
+        CRUD.inserirGasto(usuarioLogado.getId(), nome, valor, data);
+
+        JOptionPane.showMessageDialog(this, "Gasto inserido com sucesso!");
+        mostrarFinancas();
+        limparcampos();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btn_adicionarActionPerformed
+
+    private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
+         int linha = tabelafinancas.getSelectedRow();
+    if (linha == -1) {
+        JOptionPane.showMessageDialog(this, "Selecione um gasto.");
+        return;
+    }
+
+    int idFinanca = Integer.parseInt(
+            tabelafinancas.getValueAt(linha, 0).toString()
+    );
+
+    String nome = campo_gasto.getText().trim();
+    BigDecimal valor = new BigDecimal(
+            campo_valor.getText().trim().replace(",", ".")
+    );
+
+    int ano = Integer.parseInt(campo_ano.getSelectedItem().toString());
+    int dia = Integer.parseInt(campo_dia.getSelectedItem().toString());
+
+    String mesTexto = campo_mes.getSelectedItem().toString();
+    int mes = trataMesNumero(mesTexto);
+
+    LocalDate data = LocalDate.of(ano, mes, dia);
+
+    try {
+        CRUD.editarGasto(idFinanca, usuarioLogado.getId(), nome, valor, data);
+
+        JOptionPane.showMessageDialog(this, "Gasto atualizado com sucesso!");
+        mostrarFinancas();
+        limparcampos();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btn_editarActionPerformed
+
+    private void btn_apagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_apagarActionPerformed
+        int linha = tabelafinancas.getSelectedRow();
+
+    if (linha == -1) {
+        JOptionPane.showMessageDialog(this, "Selecione um gasto na tabela.");
+        return;
+    }
+
+    int idGasto = (int) tabelafinancas.getValueAt(linha, 0); // coluna ID escondida
+
+    int opcao = JOptionPane.showConfirmDialog(
+            this,
+            "Tem certeza que deseja apagar este gasto?",
+            "Confirmar exclusão",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcao != JOptionPane.YES_OPTION) return;
+
+    try {
+        boolean apagou = CRUD.apagarGasto(idGasto, usuarioLogado.getId());
+
+        if (apagou) {
+            JOptionPane.showMessageDialog(this, "Gasto apagado com sucesso!");
+            mostrarFinancas();  // recarrega a tabela
+            limparcampos();     // se você tiver
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi possível apagar (gasto não encontrado ou não pertence a você).");
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Erro ao apagar gasto:\n" + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btn_apagarActionPerformed
+
+    private void tabelafinancasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelafinancasMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelafinancasMouseEntered
 
     /**
      * @param args the command line arguments
@@ -153,9 +452,21 @@ public class Telalogado extends javax.swing.JFrame {
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_adicionar;
+    private javax.swing.JButton btn_apagar;
+    private javax.swing.JButton btn_editar;
     private javax.swing.JButton btn_visualizar;
+    private javax.swing.JComboBox<String> campo_ano;
+    private javax.swing.JComboBox<String> campo_dia;
+    private javax.swing.JTextField campo_gasto;
+    private javax.swing.JComboBox<String> campo_mes;
+    private javax.swing.JTextField campo_valor;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaFinancas;
+    private javax.swing.JLabel lblusuario;
+    private javax.swing.JTable tabelafinancas;
     // End of variables declaration//GEN-END:variables
 }
