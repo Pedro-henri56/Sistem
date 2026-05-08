@@ -300,5 +300,8 @@ private Usuarios usuarioLogado;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblusuario;
     private javax.swing.JTable tabelafinancas;
-    // End of variables declaration//GEN-END:variables
+    
+    private void initComponents() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
