@@ -278,5 +278,26 @@ public static boolean usuarioExiste(String nome, String email) throws SQLExcepti
     }
 }
 
+//Fazer a somar dos Gastos do Usuario
+
+public static BigDecimal somarGastosPotUsuario(int usuarioId) throws SQLException {
     
+    String sql = "SELECT SUM(valor) FROM financas WHERE usuario_id = ?";
+    
+    try (Connection conn = ConexaoDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, usuarioId);
+        
+        try (ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                return rs.getBigDecimal(1);
+            }
+        }
+    }
+        return BigDecimal.ZERO;
+    
+}    
+
 }
